@@ -8,4 +8,4 @@ class SystemConfig:
     })
 
 
-config = SystemConfig
+Config = SystemConfig
