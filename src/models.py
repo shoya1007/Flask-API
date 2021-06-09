@@ -21,7 +21,7 @@ class CitySchema(ma.Schema):
         fields = ('id', 'name', 'country_code', 'district', 'population')
 
 
-class Country(db.model):
+class Country(db.Model):
     __tablename__ = 'country'
 
     code = db.Column(db.String(3), nullable=False, primary_key=True)
@@ -38,7 +38,7 @@ class Country(db.model):
     government_form = db.Column(db.String(45), nullable=False)
     head_of_state = db.Column(db.String(60), nullable=False)
     capital = db.Column(db.String(11), nullable=False)
-    code2 = db.column(db.String(2), nullable=False)
+    code2 = db.Column(db.String(2), nullable=False)
 
 
 class CountrySchema(ma.Schema):
