@@ -19,3 +19,30 @@ class CitySchema(ma.Schema):
     class Meta:
         model = City
         fields = ('id', 'name', 'country_code', 'district', 'population')
+
+
+class Country(db.model):
+    __tablename__ = 'country'
+
+    code = db.Column(db.String(3), nullable=False, primary_key=True)
+    name = db.Column(db.String(52), nullable=False)
+    continent = db.Column(db.Enum, nullable=False)
+    region = db.Column(db.String(26), nullable=False)
+    surface_area = db.Column(db.Float, nullable=False)
+    indep_year = db.Column(db.Integer)
+    population = db.Column(db.Integer, nullable=False)
+    life_expectancy = db.column(db.Float)
+    gnp = db.Column(db.Float)
+    gnp_old = db.Column(db.Float)
+    local_name = db.Column(db.String(45), nullable=False)
+    government_form = db.Column(db.String(45), nullable=False)
+    head_of_state = db.Column(db.String(60), nullable=False)
+    capital = db.Column(db.String(11), nullable=False)
+    code2 = db.column(db.String(2), nullable=False)
+
+
+class CountrySchema(ma.Schema):
+    class Meta:
+        model = Country
+        fields = ('code', 'name', 'continent', 'region', 'surface_area', 'indep_year', 'population',
+                  'life_expectancy', 'gnp', 'gnp_old', 'local_name', 'government_form', 'head_of_state', 'capital', 'code2')

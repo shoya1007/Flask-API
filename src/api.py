@@ -35,9 +35,15 @@ def fetch_cities():
 
 @api.route('/city/limit/', methods=['GET'])
 def fetch_cities_limit():
-    cities = db.session.query(City).limit(10).all()
-    if cities:
-        city_schema = CitySchema(many=True)
-        return jsonify(city_schema.dump(cities)), 200
+    req = request.args
+
+    if req:
+        offset = req.get('offset')
+        cities = db.session.query(City).limit(10).offset(offset).all()
+        if cities:
+            city_schema = CitySchema(many=True)
+            return jsonify(city_schema.dump(cities)), 200
+        else:
+            return jsonify({}), 404
     else:
-        return jsonify({}), 404
+        return jsonify({'error': 'Parameter is not expected.'})
