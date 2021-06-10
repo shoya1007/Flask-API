@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from models import db, City, CitySchema, Country, CountrySchema
+from models import db, City, CitySchema, Country
+import requests
 
 api = Blueprint('api', __name__, url_prefix='/flask')
 
@@ -58,6 +59,13 @@ def fetch_cities_with_country():
         return jsonify(city_schema.dump(cities)), 200
     else:
         return jsonify({}), 404
+
+
+@api.route('/country/', methods=['GET'])
+def fetch_countries_foreign_api():
+    url = 'https://restcountries.eu/rest/v2/all'
+    res = requests.get(url)
+    return jsonify({'countries': res.json()}), 200
 
 
 @api.errorhandler(400)
