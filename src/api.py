@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import City, CitySchema, db
+from models import db, City, CitySchema, Country, CountrySchema
 
 api = Blueprint('api', __name__, url_prefix='/flask')
 
@@ -44,3 +44,33 @@ def fetch_cities_limit():
         return jsonify(city_schema.dump(cities)), 200
     else:
         return jsonify({}), 404
+
+
+@api.route('/ctiyWithCountry/', methods=['GET'])
+# Enum型でエラーが出るため現在使用不可
+def fetch_cities_with_country():
+    limit = request.args.get('limit', default=10, type=int)
+    offset = request.args.get('offset', default=0, type=int)
+    cities = db.session.query(City, Country).join(
+        Country, City.country_code == Country.code).limit(limit).offset(offset).all()
+    if cities:
+        city_schema = CitySchema(many=True)
+        return jsonify(city_schema.dump(cities)), 200
+    else:
+        return jsonify({}), 404
+
+
+@api.errorhandler(400)
+@api.errorhandler(401)
+@api.errorhandler(403)
+@api.errorhandler(404)
+@api.errorhandler(500)
+# エラーハンドリング
+def error_handler(err):
+    res = jsonify({
+        'error': {
+            'message': 'Error!Try again!'
+        },
+        'code': err.code
+    })
+    return res, err.code
